@@ -1,0 +1,3 @@
+LISA component is thunder plugin that is responsible to install (download and store locally on STB) and update apps (typically DAC bundles) and their local applications' metadata. It provides API service that allows another entity (typically resident/operator app) to install apps (typically DAC bundles), get list of locally stored apps and get notified of changes. It manages the local storage, both for downloadable bundles as well as persistent storage usable by application code itself.
+LISA is an abbreviation from Local Inventory Storage Manager of DAC Apps and is part of RDK Downloadable Application Container framework on CPE.
+More info see https://wiki.rdkcentral.com/display/ASP/LISA#LISA-Whatisimplemented,whatNOT,developmentphasing
