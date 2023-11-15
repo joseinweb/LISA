@@ -1,0 +1,12 @@
+autostart = "true"
+
+configuration = JSON()
+configuration.add("dbpath", "/mnt/apps/dac/db")
+configuration.add("appspath", "/mnt/apps/dac/images")
+configuration.add("datapath", "/mnt/data/dac")
+configuration.add("annotationsFile", "annotations.json")
+configuration.add("annotationsRegex", "public\\.*")
+rootobject = JSON()
+rootobject.add("outofprocess", "true")
+rootobject.add("mode", "Container")
+configuration.add("root", rootobject)
