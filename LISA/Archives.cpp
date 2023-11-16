@@ -24,6 +24,7 @@
 #include <archive_entry.h>
 
 #include <memory>
+#include <cassert>
 
 namespace WPEFramework {
 namespace Plugin {

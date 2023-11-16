@@ -494,6 +494,20 @@ uint32_t Executor::GetMetadata(const std::string& type,
                          const std::string& version,
                          DataStorage::AppMetadata& metadata) const
 {
+    if (type == DAC_CONFIG_MIMETYPE && id == DAC_CONFIG_APP_ID
+            && version == DAC_CONFIG_APP_VERSION) {
+        metadata.appDetails.id = DAC_CONFIG_APP_ID;
+        metadata.appDetails.type = DAC_CONFIG_MIMETYPE;
+        metadata.appDetails.version = DAC_CONFIG_APP_VERSION;
+        metadata.metadata.emplace_back(DACBUNDLEPLATFORMNAMEOVERRIDE_KEY_NAME,
+                                                     config.getDacBundlePlatformNameOverride());
+        metadata.metadata.emplace_back(DACBUNDLEFIRMWARECOMPATIBILITYKEY_KEY_NAME,
+                                                     config.getDacBundleFirmwareCompatibilityKey());
+        metadata.metadata.emplace_back(ASMS_URL_KEY_NAME,
+                                       config.getAsmsUrl());
+        return ERROR_NONE;
+    }
+
     if (type.empty() || id.empty() || version.empty()) {
         return ERROR_WRONG_PARAMS;
     }

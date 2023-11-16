@@ -91,6 +91,15 @@ Config::Config(const std::string& aConfig)
             else if (it->first == DOWNLOAD_TIMEOUT_SECS_KEY_NAME) {
                 downloadTimeoutSeconds = it->second.get_value<unsigned int>();
             }
+            else if (it->first == DACBUNDLEPLATFORMNAMEOVERRIDE_KEY_NAME) {
+                dacBundlePlatformNameOverride = it->second.get_value<std::string>();
+            }
+            else if (it->first == DACBUNDLEFIRMWARECOMPATIBILITYKEY_KEY_NAME) {
+                dacBundleFirmwareCompatibilityKey = it->second.get_value<std::string>();
+            }
+            else if (it->first == ASMS_URL_KEY_NAME) {
+                asmsUrl = it->second.get_value<std::string>();
+            }
         }
     }
     catch(std::exception& exc) {
@@ -143,6 +152,21 @@ unsigned int Config::getDownloadTimeoutSeconds() const
     return downloadTimeoutSeconds;
 }
 
+const std::string& Config::getDacBundlePlatformNameOverride() const
+{
+    return dacBundlePlatformNameOverride;
+}
+
+const std::string& Config::getDacBundleFirmwareCompatibilityKey() const
+{
+    return dacBundleFirmwareCompatibilityKey;
+}
+
+const std::string& Config::getAsmsUrl() const
+{
+    return asmsUrl;
+}
+
 std::ostream& operator<<(std::ostream& out, const Config& config)
 {
     return out << "[appsPath: " << config.appsPath << " tmpPath: " << config.appsTmpPath << " appStoragePath: "
@@ -152,6 +176,9 @@ std::ostream& operator<<(std::ostream& out, const Config& config)
                << " downloadRetryAfterSeconds: " << config.downloadRetryAfterSeconds
                << " downloadRetryMaxTimes: " << config.downloadRetryMaxTimes
                << " downloadTimeoutSeconds: " << config.downloadTimeoutSeconds
+               << " dacBundlePlatformNameOverride: " << config.dacBundlePlatformNameOverride
+               << " dacBundleFirmwareCompatibilityKey: " << config.dacBundleFirmwareCompatibilityKey
+               << " asmsUrl: " << config.asmsUrl
             << "]";
 };
 
