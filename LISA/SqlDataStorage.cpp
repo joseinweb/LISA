@@ -23,6 +23,7 @@
 #include <fstream>
 #include <string.h>
 #include <sstream>
+#include <cassert>
 
 #ifndef SQLITE_FILE_HEADER
 #define SQLITE_FILE_HEADER "SQLite format 3"

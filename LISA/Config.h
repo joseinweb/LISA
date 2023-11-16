@@ -25,6 +25,13 @@ namespace WPEFramework {
 namespace Plugin {
 namespace LISA {
 
+const std::string DAC_CONFIG_MIMETYPE{"application/LISA"};
+const std::string DAC_CONFIG_APP_ID{"lisa.dac.config"};
+const std::string DAC_CONFIG_APP_VERSION{"0"};
+const std::string DACBUNDLEPLATFORMNAMEOVERRIDE_KEY_NAME{"dacBundlePlatformNameOverride"};
+const std::string DACBUNDLEFIRMWARECOMPATIBILITYKEY_KEY_NAME{"dacBundleFirmwareCompatibilityKey"};
+const std::string ASMS_URL_KEY_NAME{"asmsUrl"};
+
 class Config
 {
 public:
@@ -40,6 +47,9 @@ public:
     unsigned int getDownloadRetryAfterSeconds() const;
     unsigned int getDownloadRetryMaxTimes() const;
     unsigned int getDownloadTimeoutSeconds() const;
+    const std::string& getDacBundlePlatformNameOverride() const;
+    const std::string& getDacBundleFirmwareCompatibilityKey() const;
+    const std::string& getAsmsUrl() const;
 
     friend std::ostream& operator<<(std::ostream& out, const Config& config);
 
@@ -53,6 +63,9 @@ private:
     unsigned int downloadRetryAfterSeconds{30};
     unsigned int downloadRetryMaxTimes{4};
     unsigned int downloadTimeoutSeconds{15 * 60};
+    std::string dacBundlePlatformNameOverride;
+    std::string dacBundleFirmwareCompatibilityKey;
+    std::string asmsUrl;
 };
 
 } // namespace LISA

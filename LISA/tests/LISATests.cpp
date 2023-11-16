@@ -31,6 +31,7 @@
 
 #include <Executor.h>
 #include <Filesystem.h>
+#include <Config.h>
 
 using namespace std;
 using namespace WPEFramework::Plugin::LISA;
@@ -142,8 +143,11 @@ static void configure(Executor &lisa, std::string annotations_file = "") {
                    "   \"annotationsRegex\":\"" + annotations_regex + "\","
                    "   \"downloadRetryAfterSeconds\":" + std::to_string(10) + ","
                    "   \"downloadRetryMaxTimes\":" +  std::to_string(1) + ","
-                   "   \"downloadTimeoutSeconds\":" +  std::to_string(30) + "}"
-                   );
+                   "   \"downloadTimeoutSeconds\":" +  std::to_string(30) + ","
+                   "   \"dacBundlePlatformNameOverride\": \"rpi4\","
+                   "   \"dacBundleFirmwareCompatibilityKey\": \"1.0.0-e71889dc02521bfdc2f9f38f750b34224184c375-dbg\","
+                   "   \"asmsUrl\": \"http://....\""
+                   "}");
 }
 
 static Executor::OperationStatusEvent last_event_received_;
@@ -425,9 +429,7 @@ CATCH_TEST_CASE("LISA : install 2 apps same id but different type = not allowed"
 
     Filesystem::StorageDetails details2;
     result = lisa.GetStorageDetails("application/vnd.rdk-app.dac-other.native", "com.rdk.waylandegltest2", DACAPP_VERSION, details2);
-    CATCH_REQUIRE(result == 0);
-    CATCH_CHECK(details2.appPath.empty());
-    CATCH_CHECK(details2.persistentPath.empty());
+    CATCH_REQUIRE(result == Executor::ReturnCodes::ERROR_WRONG_PARAMS);
 }
 
 CATCH_TEST_CASE("LISA : install apps, 2 versions, remove version 1", "[all][test6][quick]") {
@@ -994,7 +996,7 @@ CATCH_TEST_CASE("LISA : cancel installation test", "[all][test13][quick]") {
 
     Filesystem::StorageDetails details;
     result = lisa.GetStorageDetails(DACAPP_MIME, DACAPP_ID, DACAPP_VERSION, details);
-    CATCH_CHECK(result == 0);
+    CATCH_CHECK(result == Executor::ReturnCodes::ERROR_WRONG_PARAMS);
 
     CATCH_CHECK(countAppsInDB() == 0);
     CATCH_CHECK(countInstalledAppsInDB() == 0);
@@ -1152,3 +1154,22 @@ CATCH_TEST_CASE("LISA : test of downloadTimeoutSeconds", "[all][test18][slow][mo
     CATCH_CHECK(last_event_received_.version == DACAPP_VERSION);
     CATCH_CHECK(last_event_received_.handle == handle);
 }
+
+CATCH_TEST_CASE("LISA : get dac config test", "[all][test19][quick]") {
+    Executor lisa([](const Executor::OperationStatusEvent &event) {
+        eventHandler(event);
+    });
+    configure(lisa);
+
+    DataStorage::AppMetadata metadata;
+    auto result = lisa.GetMetadata(DAC_CONFIG_MIMETYPE , DAC_CONFIG_APP_ID, DAC_CONFIG_APP_VERSION, metadata);
+    CATCH_REQUIRE(result == 0);
+    CATCH_CHECK(metadata.appDetails.type == DAC_CONFIG_MIMETYPE);
+    CATCH_CHECK(metadata.appDetails.id == DAC_CONFIG_APP_ID);
+    CATCH_CHECK(metadata.appDetails.version == DAC_CONFIG_APP_VERSION);
+    CATCH_CHECK(metadata.metadata.size() == 3);
+    CATCH_CHECK(findInMetadata(metadata, DACBUNDLEPLATFORMNAMEOVERRIDE_KEY_NAME, "rpi4"));
+    CATCH_CHECK(findInMetadata(metadata, DACBUNDLEFIRMWARECOMPATIBILITYKEY_KEY_NAME, "1.0.0-e71889dc02521bfdc2f9f38f750b34224184c375-dbg"));
+    CATCH_CHECK(findInMetadata(metadata, ASMS_URL_KEY_NAME, "http://...."));
+}
+
