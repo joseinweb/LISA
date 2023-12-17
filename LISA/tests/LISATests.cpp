@@ -146,7 +146,7 @@ static void configure(Executor &lisa, std::string annotations_file = "") {
                    "   \"downloadTimeoutSeconds\":" +  std::to_string(30) + ","
                    "   \"dacBundlePlatformNameOverride\": \"rpi4\","
                    "   \"dacBundleFirmwareCompatibilityKey\": \"1.0.0-e71889dc02521bfdc2f9f38f750b34224184c375-dbg\","
-                   "   \"asmsUrl\": \"http://....\""
+                   "   \"configUrl\": \"https://....\""
                    "}");
 }
 
@@ -1170,6 +1170,6 @@ CATCH_TEST_CASE("LISA : get dac config test", "[all][test19][quick]") {
     CATCH_CHECK(metadata.metadata.size() == 3);
     CATCH_CHECK(findInMetadata(metadata, DACBUNDLEPLATFORMNAMEOVERRIDE_KEY_NAME, "rpi4"));
     CATCH_CHECK(findInMetadata(metadata, DACBUNDLEFIRMWARECOMPATIBILITYKEY_KEY_NAME, "1.0.0-e71889dc02521bfdc2f9f38f750b34224184c375-dbg"));
-    CATCH_CHECK(findInMetadata(metadata, ASMS_URL_KEY_NAME, "http://...."));
+    CATCH_CHECK(findInMetadata(metadata, CONFIG_URL_KEY_NAME, "https://...."));
 }
 

@@ -97,8 +97,8 @@ Config::Config(const std::string& aConfig)
             else if (it->first == DACBUNDLEFIRMWARECOMPATIBILITYKEY_KEY_NAME) {
                 dacBundleFirmwareCompatibilityKey = it->second.get_value<std::string>();
             }
-            else if (it->first == ASMS_URL_KEY_NAME) {
-                asmsUrl = it->second.get_value<std::string>();
+            else if (it->first == CONFIG_URL_KEY_NAME) {
+                configUrl = it->second.get_value<std::string>();
             }
         }
     }
@@ -162,9 +162,9 @@ const std::string& Config::getDacBundleFirmwareCompatibilityKey() const
     return dacBundleFirmwareCompatibilityKey;
 }
 
-const std::string& Config::getAsmsUrl() const
+const std::string& Config::getConfigUrl() const
 {
-    return asmsUrl;
+    return configUrl;
 }
 
 std::ostream& operator<<(std::ostream& out, const Config& config)
@@ -178,7 +178,7 @@ std::ostream& operator<<(std::ostream& out, const Config& config)
                << " downloadTimeoutSeconds: " << config.downloadTimeoutSeconds
                << " dacBundlePlatformNameOverride: " << config.dacBundlePlatformNameOverride
                << " dacBundleFirmwareCompatibilityKey: " << config.dacBundleFirmwareCompatibilityKey
-               << " asmsUrl: " << config.asmsUrl
+               << " configUrl: " << config.configUrl
             << "]";
 };
 
