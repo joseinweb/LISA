@@ -503,8 +503,8 @@ uint32_t Executor::GetMetadata(const std::string& type,
                                                      config.getDacBundlePlatformNameOverride());
         metadata.metadata.emplace_back(DACBUNDLEFIRMWARECOMPATIBILITYKEY_KEY_NAME,
                                                      config.getDacBundleFirmwareCompatibilityKey());
-        metadata.metadata.emplace_back(ASMS_URL_KEY_NAME,
-                                       config.getAsmsUrl());
+        metadata.metadata.emplace_back(CONFIG_URL_KEY_NAME,
+                                       config.getConfigUrl());
         return ERROR_NONE;
     }
 
