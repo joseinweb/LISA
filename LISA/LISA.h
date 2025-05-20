@@ -48,7 +48,7 @@ class LISA : public PluginHost::IPlugin, public PluginHost::JSONRPC {
                 }
 
             public:
-                void operationStatus(const string& handle, const string& operation, const string& type, const string& id,
+                void OperationStatus(const string& handle, const string& operation, const string& type, const string& id,
                                      const string& version, const string& status, const string& details) override
                 {
                     _parent.OperationStatus(handle, operation, type, id, version, status, details);

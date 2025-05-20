@@ -57,9 +57,9 @@ namespace Plugin {
         ASSERT(destination != nullptr);
 
         module.Register<InstallParamsData,Core::JSON::String>(_T("install"),
-            [destination, this](const InstallParamsData& params, Core::JSON::String& response) -> uint32_t
+            [destination, this](const InstallParamsData& params, Core::JSON::String& response) -> Core::hresult
             {
-                uint32_t errorCode = Core::ERROR_NONE;
+                Core::hresult errorCode = Core::ERROR_NONE;
                 INFO("Install");
 
                 std::string result;
@@ -77,9 +77,9 @@ namespace Plugin {
             });
 
         module.Register<UninstallParamsData,Core::JSON::String>(_T("uninstall"),
-            [destination, this](const UninstallParamsData& params, Core::JSON::String& response) -> uint32_t
+            [destination, this](const UninstallParamsData& params, Core::JSON::String& response) -> Core::hresult
             {
-                uint32_t errorCode = Core::ERROR_NONE;
+                Core::hresult errorCode = Core::ERROR_NONE;
                 INFO("Uninstall");
 
                 std::string result;
@@ -98,9 +98,9 @@ namespace Plugin {
         // classes for functions that have the same input params. Re-use other class.
         using HandleResultData = CancelParamsInfo;
         module.Register<LockParamsData,HandleResultData>(_T("lock"),
-            [destination, this](const LockParamsData& params, HandleResultData& response) -> uint32_t
+            [destination, this](const LockParamsData& params, HandleResultData& response) -> Core::hresult
             {
-                uint32_t errorCode = Core::ERROR_NONE;
+                Core::hresult errorCode = Core::ERROR_NONE;
                 std::string val;
                 Exchange::ILISA::IHandleResult* result;
 
@@ -129,9 +129,9 @@ namespace Plugin {
         // classes for functions that have the same input params. Re-use other class.
         using UnlockParamsData = CancelParamsInfo;
         module.Register<UnlockParamsData,Core::JSON::Container>(_T("unlock"),
-            [destination, this](const UnlockParamsData& params, Core::JSON::Container& response) -> uint32_t
+            [destination, this](const UnlockParamsData& params, Core::JSON::Container& response) -> Core::hresult
             {
-               uint32_t errorCode = Core::ERROR_NONE;
+               Core::hresult errorCode = Core::ERROR_NONE;
                INFO("Unlock");
 
                errorCode = destination->Unlock(
@@ -145,9 +145,9 @@ namespace Plugin {
         // classes for functions that have the same input params. Re-use other class.
         using GetLockInfoParamsInfo = GetStorageDetailsParamsInfo;
         module.Register<GetLockInfoParamsInfo,LockinfoData>(_T("getLockInfo"),
-             [destination, this](const GetLockInfoParamsInfo& params, LockinfoData& response) -> uint32_t
+             [destination, this](const GetLockInfoParamsInfo& params, LockinfoData& response) -> Core::hresult
              {
-                 uint32_t errorCode = Core::ERROR_NONE;
+                 Core::hresult errorCode = Core::ERROR_NONE;
                  std::string val;
                  Exchange::ILISA::ILockInfo* result;
 
@@ -173,9 +173,9 @@ namespace Plugin {
              });
 
         module.Register<DownloadParamsData,Core::JSON::String>(_T("download"),
-            [destination, this](const DownloadParamsData& params, Core::JSON::String& response) -> uint32_t
+            [destination, this](const DownloadParamsData& params, Core::JSON::String& response) -> Core::hresult
             {
-                uint32_t errorCode = Core::ERROR_NONE;
+                Core::hresult errorCode = Core::ERROR_NONE;
                 INFO("Download");
 
                 std::string result;
@@ -192,9 +192,9 @@ namespace Plugin {
             });
 
         module.Register<ResetParamsData,Core::JSON::String>(_T("reset"),
-            [destination, this](const ResetParamsData& params, Core::JSON::String& response) -> uint32_t
+            [destination, this](const ResetParamsData& params, Core::JSON::String& response) -> Core::hresult
             {
-                uint32_t errorCode = Core::ERROR_NONE;
+                Core::hresult errorCode = Core::ERROR_NONE;
                 INFO("Reset");
                 std::string result{};
                 errorCode = destination->Reset(
@@ -209,9 +209,9 @@ namespace Plugin {
             });
 
         module.Register<GetStorageDetailsParamsInfo,StoragepayloadData>(_T("getStorageDetails"),
-            [destination, this](const GetStorageDetailsParamsInfo& params, StoragepayloadData& response) -> uint32_t
+            [destination, this](const GetStorageDetailsParamsInfo& params, StoragepayloadData& response) -> Core::hresult
             {
-                uint32_t errorCode = Core::ERROR_NONE;
+                Core::hresult errorCode = Core::ERROR_NONE;
 
                 INFO(" ");
 
@@ -262,9 +262,9 @@ namespace Plugin {
             });
 
         module.Register<SetAuxMetadataParamsData,void>(_T("setAuxMetadata"),
-            [destination, this](const SetAuxMetadataParamsData& params) -> uint32_t
+            [destination, this](const SetAuxMetadataParamsData& params) -> Core::hresult
             {
-                uint32_t errorCode = Core::ERROR_NONE;
+                Core::hresult errorCode = Core::ERROR_NONE;
                 INFO("SetAuxMetadata");
 
                 errorCode = destination->SetAuxMetadata(
@@ -279,9 +279,9 @@ namespace Plugin {
             });
 
         module.Register<ClearAuxMetadataParamsData,void>(_T("clearAuxMetadata"),
-            [destination, this](const ClearAuxMetadataParamsData& params) -> uint32_t
+            [destination, this](const ClearAuxMetadataParamsData& params) -> Core::hresult
             {
-                uint32_t errorCode = Core::ERROR_NONE;
+                Core::hresult errorCode = Core::ERROR_NONE;
                 INFO("ClearAuxMetadata");
 
                 errorCode = destination->ClearAuxMetadata(
@@ -302,10 +302,10 @@ namespace Plugin {
         // GetStorageDetails in it's place.
         using GetMetadataParamsInfo = GetStorageDetailsParamsInfo;
         module.Register<GetMetadataParamsInfo,MetadatapayloadData>(_T("getMetadata"),
-            [destination, this](const GetMetadataParamsInfo& params, MetadatapayloadData& response) -> uint32_t
+            [destination, this](const GetMetadataParamsInfo& params, MetadatapayloadData& response) -> Core::hresult
             {
                 INFO("GetMetadata");
-                uint32_t errorCode = Core::ERROR_NONE;
+                Core::hresult errorCode = Core::ERROR_NONE;
                 Exchange::ILISA::IMetadataPayload* resultRaw = nullptr;
                 Exchange::ILISA::IKeyValueIterator* resourcesRaw = nullptr;
                 Exchange::ILISA::IKeyValueIterator* auxMetadataRaw = nullptr;
@@ -393,9 +393,9 @@ namespace Plugin {
             });
 
         module.Register<CancelParamsInfo,Core::JSON::String>(_T("cancel"),
-            [destination, this](const CancelParamsInfo& params, Core::JSON::String& response) -> uint32_t
+            [destination, this](const CancelParamsInfo& params, Core::JSON::String& response) -> Core::hresult
             {
-                uint32_t errorCode = Core::ERROR_NONE;
+                Core::hresult errorCode = Core::ERROR_NONE;
                 INFO("Cancel");
                 std::string result{};
                 errorCode = destination->Cancel(
@@ -411,9 +411,9 @@ namespace Plugin {
         // is the same case
         using GetProgressParamsInfo = CancelParamsInfo;
         module.Register<GetProgressParamsInfo,Core::JSON::DecUInt64>(_T("getProgress"),
-            [destination, this](const GetProgressParamsInfo& params, Core::JSON::DecUInt64& response) -> uint32_t
+            [destination, this](const GetProgressParamsInfo& params, Core::JSON::DecUInt64& response) -> Core::hresult
             {
-                uint32_t errorCode = Core::ERROR_NONE;
+                Core::hresult errorCode = Core::ERROR_NONE;
                 INFO("GetProgress");
 
                 uint32_t result;
@@ -426,13 +426,13 @@ namespace Plugin {
             });
 
         module.Register<GetListParamsData,AppslistpayloadData>(_T("getList"),
-            [destination, this](const GetListParamsData& params, AppslistpayloadData& response) -> uint32_t
+            [destination, this](const GetListParamsData& params, AppslistpayloadData& response) -> Core::hresult
             {
-               using namespace Exchange;
+                Core::hresult errorCode = Core::ERROR_NONE;
+                using namespace Exchange;
 
                 INFO("GetList");
 
-                uint32_t errorCode = Core::ERROR_NONE;
                 ILISA::IAppsPayload* appListRaw = nullptr;
                 errorCode = destination->GetList(
                     params.Type.Value(),
@@ -545,3 +545,4 @@ namespace Plugin {
 } // namespace Plugin
 
 }
+

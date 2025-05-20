@@ -41,7 +41,7 @@ public:
     {
     }
 
-    uint32_t Install(const std::string& type,
+    Core::hresult Install(const std::string& type,
             const std::string& id,
             const std::string& version,
             const std::string& url,
@@ -49,16 +49,16 @@ public:
             const std::string& category,
             std::string& handle /* @out */) override
     {
-        return executor.Install(type, id, version, url, appName, category, handle);
+        return static_cast<Core::hresult>(executor.Install(type, id, version, url, appName, category, handle));
     }
 
-    uint32_t Uninstall(const std::string& type,
+    Core::hresult Uninstall(const std::string& type,
             const std::string& id,
             const std::string& version,
             const std::string& uninstallType,
             std::string& handle /* @out */) override
     {
-        return executor.Uninstall(type, id, version, uninstallType, handle);
+        return static_cast<Core::hresult>(executor.Uninstall(type, id, version, uninstallType, handle));
     }
 
     class HandleResultImpl : public ILISA::IHandleResult
@@ -77,7 +77,7 @@ public:
         {
         }
 
-        uint32_t Handle(std::string& handle) const override
+        Core::hresult Handle(std::string& handle) const override
         {
             handle = _handle;
             return Core::ERROR_NONE;
@@ -92,7 +92,7 @@ public:
         END_INTERFACE_MAP
     }; // class HandleResultImpl
 
-    uint32_t Lock(const std::string& type,
+    Core::hresult Lock(const std::string& type,
                   const std::string& id,
                   const std::string& version,
                   const std::string& reason,
@@ -104,12 +104,12 @@ public:
         result = Core::Service<HandleResultImpl>::Create<ILISA::IHandleResult>(
                 handle
         );
-        return error;
+        return static_cast<Core::hresult>(error);
     }
 
-    uint32_t Unlock(const std::string& handle) override
+    Core::hresult Unlock(const std::string& handle) override
     {
-        return executor.Unlock(handle);
+        return static_cast<Core::hresult>(executor.Unlock(handle));
     }
 
     class LockInfoImpl : public ILISA::ILockInfo
@@ -128,13 +128,13 @@ public:
         {
         }
 
-        uint32_t Reason(std::string& reason) const override
+        Core::hresult Reason(std::string& reason) const override
         {
             reason = _reason;
             return Core::ERROR_NONE;
         }
 
-        uint32_t Owner(std::string& owner) const override
+        Core::hresult Owner(std::string& owner) const override
         {
             owner = _owner;
             return Core::ERROR_NONE;
@@ -150,7 +150,7 @@ public:
         END_INTERFACE_MAP
     }; // class LockInfoImpl
 
-    uint32_t GetLockInfo(const std::string& type,
+    Core::hresult GetLockInfo(const std::string& type,
                          const std::string& id,
                          const std::string& version,
                          ILISA::ILockInfo*& result) override
@@ -160,10 +160,10 @@ public:
         result = Core::Service<LockInfoImpl>::Create<ILISA::ILockInfo>(
                 reason, owner
         );
-        return error;
+        return static_cast<Core::hresult>(error);
     }
 
-    uint32_t Download(const std::string& type,
+    Core::hresult Download(const std::string& type,
             const std::string& id,
             const std::string& version,
             const std::string& resKey,
@@ -174,7 +174,7 @@ public:
         return Core::ERROR_NONE;
     }
 
-    uint32_t Reset(const std::string& type,
+    Core::hresult Reset(const std::string& type,
             const std::string& id,
             const std::string& version,
             const std::string& resetType) override
@@ -201,17 +201,17 @@ public:
         {
         }
 
-        uint32_t Path(string& path) const override {
+        Core::hresult Path(string& path) const override {
             path = _path;
             return Core::ERROR_NONE;
         }
 
-        uint32_t QuotaKB(string& quota) const override {
+        Core::hresult QuotaKB(string& quota) const override {
             quota = _quota;
             return Core::ERROR_NONE;
         }
 
-        uint32_t UsedKB(string& usedKB) const override {
+        Core::hresult UsedKB(string& usedKB) const override {
             usedKB = _usedKB;
             return Core::ERROR_NONE;
         }
@@ -243,14 +243,14 @@ public:
         {
         }
 
-        uint32_t Apps(ILISA::IStorage*& storage) const override
+        Core::hresult Apps(ILISA::IStorage*& storage) const override
         {
             storage = (Core::Service<StorageImpl>::Create<ILISA::IStorage>(_appPath, _appQuota, _appUsedKB));
             ASSERT(storage);
             return Core::ERROR_NONE;
         }
 
-        uint32_t Persistent(ILISA::IStorage*& storage) const override
+        Core::hresult Persistent(ILISA::IStorage*& storage) const override
         {
             storage = (Core::Service<StorageImpl>::Create<ILISA::IStorage>( _persistentPath, _persistentQuota, _persistentUsedKB));
             ASSERT(storage);
@@ -286,13 +286,13 @@ public:
         {
         }
 
-        uint32_t Key(std::string& key) const override
+        Core::hresult Key(std::string& key) const override
         {
             key = _key;
             return Core::ERROR_NONE;
         }
 
-        uint32_t Value(std::string& value) const override
+        Core::hresult Value(std::string& value) const override
         {
             value = _value;
             return Core::ERROR_NONE;
@@ -334,7 +334,7 @@ public:
             }
 
         public:
-            uint32_t Reset() override
+            Core::hresult Reset() override
             {
                 _index = 0;
                 return Core::ERROR_NONE;
@@ -345,13 +345,13 @@ public:
                 return ((_index != 0) && (_index <= _list.size()));
             }
 
-            uint32_t IsValid(bool& isValid) const override
+            Core::hresult IsValid(bool& isValid) const override
             {
                 isValid = IsValid();
                 return Core::ERROR_NONE;
             }
 
-            uint32_t Next(bool& hasNext) override
+            Core::hresult Next(bool& hasNext) override
             {
                 if (_index == 0) {
                     _index = 1;
@@ -364,7 +364,7 @@ public:
                 return Core::ERROR_NONE;
             }
 
-            uint32_t Current(ILISA::IKeyValue*& keyValue) const override
+            Core::hresult Current(ILISA::IKeyValue*& keyValue) const override
             {
                 ASSERT(IsValid() == true);
                 ILISA::IKeyValue* result = nullptr;
@@ -432,31 +432,31 @@ public:
             }
         }
 
-        uint32_t AppName(string& appName /* @out */) const override
+        Core::hresult AppName(string& appName /* @out */) const override
         {
             appName = _appName;
             return Core::ERROR_NONE;
         }
 
-        uint32_t Category(string& category /* @out */) const override
+        Core::hresult Category(string& category /* @out */) const override
         {
             category = _category;
             return Core::ERROR_NONE;
         }
 
-        uint32_t Url(string& url /* @out */) const override
+        Core::hresult Url(string& url /* @out */) const override
         {
             url = _url;
             return Core::ERROR_NONE;
         }
 
-        uint32_t Resources(ILISA::IKeyValueIterator*& resources) const override
+        Core::hresult Resources(ILISA::IKeyValueIterator*& resources) const override
         {
             resources = (Core::Service<KeyValueIteratorImpl>::Create<ILISA::IKeyValueIterator>(_resources));
             return Core::ERROR_NONE;
         }
 
-        uint32_t AuxMetadata(ILISA::IKeyValueIterator*& auxMetadata /* @out */) const override
+        Core::hresult AuxMetadata(ILISA::IKeyValueIterator*& auxMetadata /* @out */) const override
         {
             auxMetadata = (Core::Service<KeyValueIteratorImpl>::Create<ILISA::IKeyValueIterator>(_auxMetadata));
             return Core::ERROR_NONE;
@@ -475,24 +475,24 @@ public:
         END_INTERFACE_MAP
     }; // MetadataPayloadImpl
 
-    uint32_t SetAuxMetadata(const std::string& type,
+    Core::hresult SetAuxMetadata(const std::string& type,
             const std::string& id,
             const std::string& version,
             const std::string& key,
             const std::string& value) override
     {
-        return executor.SetMetadata(type, id, version, key, value);
+        return static_cast<Core::hresult>(executor.SetMetadata(type, id, version, key, value));
     }
 
-    uint32_t ClearAuxMetadata(const std::string& type,
+    Core::hresult ClearAuxMetadata(const std::string& type,
             const std::string& id,
             const std::string& version,
             const std::string& key) override
     {
-        return executor.ClearMetadata(type, id, version, key);
+        return static_cast<Core::hresult>(executor.ClearMetadata(type, id, version, key));
     }
 
-    uint32_t GetMetadata(const std::string& type,
+    Core::hresult GetMetadata(const std::string& type,
             const std::string& id,
             const std::string& version,
             ILISA::IMetadataPayload*& result) override
@@ -527,25 +527,25 @@ public:
         for (auto meta : auxMetadata) {
             meta->Release();
         }
-        return Core::ERROR_NONE;
+        return static_cast<Core::hresult>(rc);
     }
 
-    uint32_t Cancel(const std::string& handle) override
+    Core::hresult Cancel(const std::string& handle) override
     {
-        return executor.Cancel(handle);
+        return static_cast<Core::hresult>(executor.Cancel(handle));
     }
 
-    uint32_t GetProgress(const std::string& handle, uint32_t& progress) override
+    Core::hresult GetProgress(const std::string& handle, uint32_t& progress) override
     {
-        return executor.GetProgress(handle, progress);
+        return static_cast<Core::hresult>(executor.GetProgress(handle, progress));
     }
 
-    uint32_t Configure(const std::string& config) override
+    Core::hresult Configure(const std::string& config) override
     {
-        return executor.Configure(config);
+        return static_cast<Core::hresult>(executor.Configure(config));
     }
 
-    virtual uint32_t Register(ILISA::INotification* notification) override
+    virtual Core::hresult Register(ILISA::INotification* notification) override
     {
         LockGuard lock(notificationMutex);
         // Make sure a callback is not registered multiple times.
@@ -559,7 +559,7 @@ public:
         return Core::ERROR_NONE;
     }
 
-    virtual uint32_t Unregister(ILISA::INotification* notification) override
+    virtual Core::hresult Unregister(ILISA::INotification* notification) override
     {
         LockGuard lock(notificationMutex);
         auto index(std::find(_notificationCallbacks.begin(), _notificationCallbacks.end(), notification));
@@ -575,12 +575,12 @@ public:
     }
 
 private:
-    void onOperationStatus(const LISA::Executor::OperationStatusEvent& event)
+    void OperationStatus(const LISA::Executor::OperationStatusEvent& event)
     {
         INFO("LISA onOperationStatus handle:", event.handle, " status: ", event.status, " details: ", event.details);
         LockGuard lock(notificationMutex);
         for(const auto index: _notificationCallbacks) {
-            index->operationStatus(event.handle, event.operationStr(), event.type, event.id, event.version, event.statusStr(), event.details);
+            index->OperationStatus(event.handle, event.operationStr(), event.type, event.id, event.version, event.statusStr(), event.details);
         }
     }
 
@@ -619,7 +619,7 @@ public:
             }
 
         public:
-            uint32_t Reset() override
+            Core::hresult Reset() override
             {
                 _index = 0;
                 return Core::ERROR_NONE;
@@ -630,13 +630,13 @@ public:
                 return ((_index != 0) && (_index <= _list.size()));
             }
 
-            uint32_t IsValid(bool& isValid) const override
+            Core::hresult IsValid(bool& isValid) const override
             {
                 isValid = IsValid();
                 return Core::ERROR_NONE;
             }
 
-            uint32_t Next(bool& hasNext) override
+            Core::hresult Next(bool& hasNext) override
             {
                 if (_index == 0) {
                     _index = 1;
@@ -649,7 +649,7 @@ public:
                 return Core::ERROR_NONE;
             }
 
-            uint32_t Current(ILISA::IAppVersion*& version) const override
+            Core::hresult Current(ILISA::IAppVersion*& version) const override
             {
                 ASSERT(IsValid() == true);
                 ILISA::IAppVersion* result = nullptr;
@@ -685,25 +685,25 @@ public:
         {
         }
 
-        uint32_t Version(std::string& version) const override
+        Core::hresult Version(std::string& version) const override
         {
             version = _version;
             return Core::ERROR_NONE;
         }
 
-        uint32_t AppName(std::string& appName) const override
+        Core::hresult AppName(std::string& appName) const override
         {
             appName = _appName;
             return Core::ERROR_NONE;
         }
 
-        uint32_t Category(std::string& category) const override
+        Core::hresult Category(std::string& category) const override
         {
             category = _category;
             return Core::ERROR_NONE;
         }
 
-        uint32_t Url(std::string& url) const override
+        Core::hresult Url(std::string& url) const override
         {
             url = _url;
             return Core::ERROR_NONE;
@@ -751,7 +751,7 @@ public:
             }
 
         public:
-            uint32_t Reset() override
+            Core::hresult Reset() override
             {
                 _index = 0;
                 return Core::ERROR_NONE;
@@ -762,13 +762,13 @@ public:
                 return ((_index != 0) && (_index <= _list.size()));
             }
 
-            uint32_t IsValid(bool& isValid) const override
+            Core::hresult IsValid(bool& isValid) const override
             {
                 isValid = IsValid();
                 return Core::ERROR_NONE;
             }
 
-            uint32_t Next(bool& hasNext) override
+            Core::hresult Next(bool& hasNext) override
             {
                 if (_index == 0) {
                     _index = 1;
@@ -781,7 +781,7 @@ public:
                 return Core::ERROR_NONE;
             }
 
-            uint32_t Current(ILISA::IApp*& app) const override
+            Core::hresult Current(ILISA::IApp*& app) const override
             {
                 ASSERT(IsValid() == true);
                 ILISA::IApp* result = nullptr;
@@ -828,19 +828,19 @@ public:
             }
         }
 
-        uint32_t Type(string& type) const override
+        Core::hresult Type(string& type) const override
         {
             type = _type;
             return Core::ERROR_NONE;
         }
 
-        uint32_t Id(string& id) const override
+        Core::hresult Id(string& id) const override
         {
             id = _id;
             return Core::ERROR_NONE;
         }
 
-        uint32_t Installed(ILISA::IAppVersion::IIterator*& versions) const override
+        Core::hresult Installed(ILISA::IAppVersion::IIterator*& versions) const override
         {
             versions = Core::Service<AppVersionImpl::IteratorImpl>::Create<ILISA::IAppVersion::IIterator>(_versions);
             ASSERT(versions);
@@ -885,7 +885,7 @@ public:
             }
         }
 
-        uint32_t Apps(ILISA::IApp::IIterator*& apps) const override
+        Core::hresult Apps(ILISA::IApp::IIterator*& apps) const override
         {
             apps = (Core::Service<AppImpl::IteratorImpl>::Create<ILISA::IApp::IIterator>(_apps));
             ASSERT(apps);
@@ -901,7 +901,7 @@ public:
     }; // AppsPayloadImpl
 
     /* @brief List installed applications. */
-    uint32_t GetList(
+    Core::hresult GetList(
         const std::string& type,
         const std::string& id,
         const std::string& version,
@@ -947,7 +947,7 @@ public:
         return rc;
     }
 
-    uint32_t GetStorageDetails(const std::string& type,
+    Core::hresult GetStorageDetails(const std::string& type,
             const std::string& id,
             const std::string& version,
             ILISA::IStoragePayload*& result) override
@@ -981,3 +981,4 @@ private:
 SERVICE_REGISTRATION(LISAImplementation, 1, 0);
 }
 }
+
