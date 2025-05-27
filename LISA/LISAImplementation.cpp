@@ -575,7 +575,7 @@ public:
     }
 
 private:
-    void OperationStatus(const LISA::Executor::OperationStatusEvent& event)
+    void onOperationStatus(const LISA::Executor::OperationStatusEvent& event)
     {
         INFO("LISA onOperationStatus handle:", event.handle, " status: ", event.status, " details: ", event.details);
         LockGuard lock(notificationMutex);
